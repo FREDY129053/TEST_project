@@ -1,0 +1,29 @@
+services:
+  db:
+    image: postgres:16
+    container_name: db_test
+    environment:
+      POSTGRES_DB: test
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+    volumes:
+      - ./dump.sql:/docker-entrypoint-initdb.d/dump.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - api_network
+
+  api:
+    build:
+      context: .
+      dockerfile: app/dockerfile
+    depends_on:
+      - db
+    networks:
+      - api_network
+    ports:
+      - "8080:8080"
+
+networks:
+  api_network:
+    driver: bridge
