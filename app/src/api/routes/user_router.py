@@ -22,6 +22,7 @@ async def login_user(data: userSchemas.UserLogin, response: Response):
       detail="user not found"
     )
   
+  # Генерация токена лучше вынести в services и возвращать его, а не так
   token = create_jwt_token({
     "uuid": str(user.id),
     "is_admin": user.is_superuser
